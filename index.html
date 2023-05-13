@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Message App</title>
+</head>
+<body>
+  <h1>Submit a Message</h1>
+  <form action="/messages" method="post">
+    <textarea name="message" placeholder="Enter your message (max 140 characters)"></textarea><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <button onclick="window.location.href='/messages'">View Messages</button>
+
+  <div id="status-container"></div>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+
+    
+    document.querySelector('form').addEventListener('submit', event => {
+      event.preventDefault();
+      const message = document.querySelector('textarea[name="message"]').value;
+      const statusContainer = document.getElementById('status-container');
+
+      
+      axios.post('/messages', { message })
+        .then(response => {
+          statusContainer.innerHTML = `<h4>${response.data.message}</h4>`
+        })
+        .catch(error => {
+          statusContainer.innerHTML = `<h4>${error.response.data.error}</h4>`
+        });
+
+      document.querySelector('textarea[name="message"]').value = '';
+    });
+  </script>
+</body>
+</html>
